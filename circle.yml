@@ -1,0 +1,12 @@
+test:
+  override:
+    - echo "There is no test"
+dependencies:
+  pre:
+    - git config --global user.email "jenkins@risevision.com"
+    - git config --global user.name "jenkins-rise"
+deployment:
+  production:
+    branch: master
+    commands:
+      - rsync -rptzl -e ssh --delete ./ scenario-runner@23.251.153.136:/home/scenario-runner
