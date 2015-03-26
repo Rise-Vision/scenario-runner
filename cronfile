@@ -1,1 +1,1 @@
-*/5 * * * * ~/run.sh
+*/5 * * * * ~/config/run.sh
