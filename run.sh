@@ -14,6 +14,17 @@ if ! which node; then
   sudo apt-get install -y nodejs
 fi
 
+if ! which phantomjs; then
+  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
+  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
+  libpng-dev libjpeg-dev
+
+  git clone git://github.com/ariya/phantomjs.git
+  cd phantomjs
+  git checkout master
+  ./build.sh --confirm --jobs 1
+fi
+
 if [ ! -d "private-keys" ]; then
   git clone git@github.com:Rise-Vision/private-keys.git
 fi
