@@ -1,1 +1,1 @@
-storage-client git@github.com:Rise-Vision/storage-client.git
+git@github.com:Rise-Vision/storage-client.git
