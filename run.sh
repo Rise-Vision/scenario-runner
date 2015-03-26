@@ -1,29 +1,5 @@
 #!/usr/bin/env bash
-echo "running"
 cd ~
-
-if ! which git; then
-  sudo apt-get update
-  sudo apt-get -y install git-core
-  git config --global user.name "jenkins"
-  git config --global user.email "jenkins@risevision.com"
-fi
-
-if ! which node; then
-  curl -sL https://deb.nodesource.com/setup_0.12 |sudo bash -
-  sudo apt-get install -y nodejs
-fi
-
-if ! which phantomjs; then
-  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
-  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
-  libpng-dev libjpeg-dev
-
-  git clone git://github.com/ariya/phantomjs.git
-  cd phantomjs
-  git checkout master
-  ./build.sh --confirm --jobs 1
-fi
 
 if [ ! -d "private-keys" ]; then
   git clone git@github.com:Rise-Vision/private-keys.git
@@ -54,4 +30,12 @@ do
   echo -n $(date) >> $DIR.log
   echo -n " " >> $DIR.log
   echo $PASSFAIL >> $DIR.log
+
+  if [ $PASSFAIL == "fail" ]; then
+    TOKEN=curl "http://metadata/computeMetadata/v1/instance/service-accounts/default/token" \
+    -H "Metadata-Flavor: Google" |sed 's/{//g' |sed 's/"//g' |awk 'BEGIN { FS = ":" } ; {print $2 }' \
+    |awk 'BEGIN { FS = "," } ; {print $1}'
+    curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
+    "http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$DIR"
+  fi
 done
