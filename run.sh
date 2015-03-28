@@ -2,10 +2,6 @@
 cd ~
 export DISPLAY=:10
 
-if [ ! -d "node_modules/selenium-webdriver" ]; then
-  npm install selenium-webdriver
-fi
-
 curl "http://metadata/computeMetadata/v1/instance/attributes/" -H "Metadata-Flavor: Google" > metadata_keys
 
 while read key; do

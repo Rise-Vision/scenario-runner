@@ -19,6 +19,10 @@ if ! which node; then
   sudo apt-get install -y nodejs
 fi
 
+if ! which bower; then
+  sudo npm install -g bower
+fi
+
 #if ! which phantomjs; then
 #  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
 #  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
