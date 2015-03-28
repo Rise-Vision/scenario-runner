@@ -1,31 +1,27 @@
 #!/usr/bin/env bash
 cd ~
+export DISPLAY=:10
 
 if [ ! -d "node_modules/selenium-webdriver" ]; then
   npm install selenium-webdriver
 fi
 
-if [ ! -d "private-keys" ]; then
-  git clone git@github.com:Rise-Vision/private-keys.git
-fi
+curl "http://metadata/computeMetadata/v1/instance/attributes/" -H "Metadata-Flavor: Google" > metadata_keys
 
-JENKINS_PASS=$(cat private-keys/jenkins-pass/jenkins-pass)
+while read key; do
+  export $key=$(curl "http://metadata/computeMetadata/v1/instance/attributes/$key" -H "Metadata-Flavor: Google")
+done < metadata_keys
 
-export DISPLAY=:10
+read -a targets <<< $(echo $E2E_TARGETS)
 
-readarray -t TARGETS < config/targets.txt
-
-for i in "${TARGETS[@]}"
+for targetUrl in "${targets[@]}"
 do
-  DIR=$(echo $i|awk 'BEGIN { FS = "/" } ; { print $2 }' | awk 'BEGIN { FS = "." } ; { print $1}')
-  if [ ! -d "$DIR" ]; then
-    git clone $i;
+  TARGET_DIR=$(echo $targetUrl|awk 'BEGIN { FS = "/" } ; { print $2 }' | awk 'BEGIN { FS = "." } ; { print $1}')
+  if [ ! -d "$TARGET_DIR" ]; then
+    git clone $targetUrl;
   fi
 
-  cd $DIR; git fetch origin master;MERGERESULT=$(git merge origin/master -X theirs);
-  if [ "$MERGERESULT" != "Already up-to-date." ]; then
-    npm install; bower install;
-  fi
+  cd $TARGET_DIR; git fetch origin master; MERGERESULT=$(git merge origin/master -X theirs);
 
   PASSFAIL=fail
   if npm run e2e; then
@@ -33,15 +29,14 @@ do
   fi
 
   cd ~
-  echo -n $(date) >> $DIR.log
-  echo -n " " >> $DIR.log
-  echo $PASSFAIL >> $DIR.log
+  echo -n $(date) >> $TARGET_DIR.log
+  echo -n " " >> $TARGET_DIR.log
+  echo $PASSFAIL >> $TARGET_DIR.log
 
   if [ $PASSFAIL == "fail" ]; then
-    TOKEN=curl "http://metadata/computeMetadata/v1/instance/service-accounts/default/token" \
-    -H "Metadata-Flavor: Google" |sed 's/{//g' |sed 's/"//g' |awk 'BEGIN { FS = ":" } ; {print $2 }' \
-    |awk 'BEGIN { FS = "," } ; {print $1}'
+    TOKEN=curl "http://metadata/computeMetadata/v1/instance/service-accounts/default/token?alt=text" \
+    -H "Metadata-Flavor: Google" |grep access_token |awk '{print $2}'
     curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
-    "http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$DIR"
+    "http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$TARGET_DIR"
   fi
 done

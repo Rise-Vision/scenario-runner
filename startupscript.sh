@@ -1,9 +1,5 @@
 #!/usr/env bash
 
-#to automatically run this at intance startup specify instance metadata as follows
-#startup-script-url https://raw.githubusercontent.com/Rise-Vision/scenario-runner/master/startupscript.sh
-#see https://cloud.google.com/compute/docs/startupscript#googlecloudstorage
-
 sudo apt-get update
 
 if [ ! -f /swapfile ]; then
