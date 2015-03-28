@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 cd ~
 
+if [ ! -d "node_modules/selenium-webdriver" ]; then
+  npm install selenium-webdriver
+fi
+
 if [ ! -d "private-keys" ]; then
   git clone git@github.com:Rise-Vision/private-keys.git
 fi
 
 JENKINS_PASS=$(cat private-keys/jenkins-pass/jenkins-pass)
+
+export DISPLAY=:10
 
 readarray -t TARGETS < config/targets.txt
 

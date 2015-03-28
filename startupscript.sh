@@ -1,3 +1,9 @@
+#!/usr/env bash
+
+#to automatically run this at intance startup specify instance metadata as follows
+#startup-script-url https://raw.githubusercontent.com/Rise-Vision/scenario-runner/master/startupscript.sh
+#see https://cloud.google.com/compute/docs/startupscript#googlecloudstorage
+
 sudo apt-get update
 
 if [ ! -f /swapfile ]; then
@@ -17,13 +23,38 @@ if ! which node; then
   sudo apt-get install -y nodejs
 fi
 
-if ! which phantomjs; then
-  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
-  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
-  libpng-dev libjpeg-dev
+#if ! which phantomjs; then
+#  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
+#  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
+#  libpng-dev libjpeg-dev
+#
+#  git clone git://github.com/ariya/phantomjs.git
+#  cd phantomjs
+#  git checkout master
+#  ./build.sh --confirm --jobs 1
+#fi
 
-  git clone git://github.com/ariya/phantomjs.git
-  cd phantomjs
-  git checkout master
-  ./build.sh --confirm --jobs 1
+if ! which unzip; then
+  sudo apt-get install -y unzip
+fi
+
+if ! which chromium; then
+  sudo apt-get install -y chromium
+fi
+
+if ! which chromedriver; then
+  curl -O "http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip"
+  unzip chromedriver_linux64.zip
+  rm chromedriver_linux64.zip
+  sudo mv chromedriver /usr/local/bin;
+  sudo chmod a+x /usr/local/bin/chromedriver;
+fi
+
+if ! which Xvfb; then
+  sudo apt-get install -y xvfb
+fi
+
+export DISPLAY=:10
+if ! pidof Xvfb ; then
+  Xvfb :10 -screen 0 1024x768x24 &
 fi
