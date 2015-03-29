@@ -14,6 +14,13 @@ if ! which git; then
   git config --global user.email "jenkins@risevision.com"
 fi
 
+if ! gcloud auth list |grep 452091732215@developer.gserviceaccount.com; then
+  git clone git@github.com:Rise-Vision/private-keys.git
+  cd private-keys
+  gcloud auth activate-service-account 452091732215@developer.gserviceaccount.com --key-file storage-server/65bd1c5e62dadd4852c8b04bf5124749985e8ff8-privatekey.p12
+  cd ..
+fi
+
 if ! which node; then
   curl -sL https://deb.nodesource.com/setup_0.12 |sudo bash -
   sudo apt-get install -y nodejs
