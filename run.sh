@@ -17,7 +17,7 @@ do
     git clone $targetUrl;
   fi
 
-  cd $TARGET_DIR; git fetch origin master; MERGERESULT=$(git merge origin/master -X theirs);
+  cd $TARGET_DIR; git fetch origin; MERGERESULT=$(git merge origin/master -X theirs);
 
   PASSFAIL=fail
   if npm run e2e; then

@@ -17,7 +17,7 @@ fi
 if ! gcloud auth list |grep 452091732215@developer.gserviceaccount.com; then
   git clone git@github.com:Rise-Vision/private-keys.git
   cd private-keys
-  gcloud auth activate-service-account 452091732215@developer.gserviceaccount.com --key-file storage-server/65bd1c5e62dadd4852c8b04bf5124749985e8ff8-privatekey.p12
+  gcloud auth activate-service-account 452091732215@developer.gserviceaccount.com --key-file storage-server/rva-media-library-ce0d2bd78b54.json
   cd ..
 fi
 
@@ -29,17 +29,6 @@ fi
 if ! which bower; then
   sudo npm install -g bower
 fi
-
-#if ! which phantomjs; then
-#  sudo apt-get install build-essential g++ flex bison gperf ruby perl \
-#  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
-#  libpng-dev libjpeg-dev
-#
-#  git clone git://github.com/ariya/phantomjs.git
-#  cd phantomjs
-#  git checkout master
-#  ./build.sh --confirm --jobs 1
-#fi
 
 if ! which unzip; then
   sudo apt-get install -y unzip
