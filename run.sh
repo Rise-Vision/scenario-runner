@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd ~
 export DISPLAY=:10
+export PATH=$PATH:/usr/bin:/usr/local/bin
 
 curl "http://metadata/computeMetadata/v1/instance/attributes/" -H "Metadata-Flavor: Google" > metadata_keys
 
@@ -33,8 +34,8 @@ do
   echo $PASSFAIL >> $TARGET_DIR.log
 
   if [ $PASSFAIL == "fail" ]; then
-    mv $TARGET_DIR/E2E_OUTFILE $TARGET_DIR/E2E_ERROR_$(date) || true
-    mv $TARGET_DIR/uncaught-exception.png $TARGET_DIR/uncaught-exception-$(date).png || true
+    mv $TARGET_DIR/E2E_OUTFILE "$TARGET_DIR/E2E_ERROR_$(date)" || true
+    mv $TARGET_DIR/uncaught-exception.png "$TARGET_DIR/uncaught-exception-$(date).png" || true
     TOKEN=curl "http://metadata/computeMetadata/v1/instance/service-accounts/default/token?alt=text" \
     -H "Metadata-Flavor: Google" |grep access_token |awk '{print $2}'
     curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
