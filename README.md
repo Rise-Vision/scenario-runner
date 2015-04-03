@@ -19,6 +19,9 @@ For Google Compute Engine instances, the instance metadata can be configured thr
 ### Failed Test Notifications
 The [run script](https://github.com/Rise-Vision/scenario-runner/blob/master/run.sh) is currently configured to send test failure notices using [RV-Logger](https://github.com/Rise-Vision/rv-logger).  For use outside of [Rise Vision](http://www.risevision.com), that section of the script will need to be removed or modified.
 
+### Log output
+The scenario runner will output the results of the npm run command to a file name E2E_OUTFILE in the target repository folder.  If the tests failed, the file will be saved as E2E_OUTFILE_[date & time of test run]. 
+
 ### Installation
 
  - Set up a vm with a scenario-runner user and add the required rsa keys to github, circle-ci, and the user's $HOME/.ssh directory
