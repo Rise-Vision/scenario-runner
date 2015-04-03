@@ -10,4 +10,4 @@ deployment:
     branch: master
     commands:
       - rsync -rptzl -e ssh --delete ./ scenario-runner@23.251.153.136:/home/scenario-runner/config
-      - ssh scenario-runner@23.251.153.136 'crontab -r; crontab ~/config/cronfile'
+      - ssh scenario-runner@23.251.153.136 'crontab ~/config/cronfile'

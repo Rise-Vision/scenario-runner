@@ -54,3 +54,5 @@ export DISPLAY=:10
 if ! pidof Xvfb ; then
   Xvfb :10 -screen 0 1024x768x24 &
 fi
+
+crontab -u scenario-runner /home/scenario-runner/cronfile
