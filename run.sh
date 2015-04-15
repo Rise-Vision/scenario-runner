@@ -19,9 +19,14 @@ do
   fi
 
   cd $TARGET_DIR;
+
   git checkout master;
   git fetch origin;
   MERGERESULT=$(git merge origin/master -X theirs -m "merge");
+
+  if [ -f E2E_OUTFILE ]; then
+    exit 0
+  fi
 
   PASSFAIL=fail
   if npm run e2e >E2E_OUTFILE 2>&1; then
@@ -40,5 +45,7 @@ do
     #-H "Metadata-Flavor: Google" |grep access_token |awk '{print $2}'
     #curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
     #"http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$TARGET_DIR"
+  else
+    rm $TARGET_DIR/E2E_OUTFILE
   fi
 done
