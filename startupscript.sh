@@ -52,6 +52,8 @@ if ! pidof Xvfb ; then
   Xvfb :10 -screen 0 1024x768x24 &
 fi
 
+gcloud components update --quiet
+
 cd /home/scenario-runner
 git clone https://github.com/Rise-Vision/scenario-runner.git config
 crontab -u scenario-runner config/cronfile
