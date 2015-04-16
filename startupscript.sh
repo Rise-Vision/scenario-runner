@@ -34,12 +34,15 @@ if ! which unzip; then
   sudo apt-get install -y unzip
 fi
 
-if ! which chromium; then
-  sudo apt-get install -y chromium
+if ! which google-chrome; then
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo dpkg -i google-chrome-*.deb
+  sudo apt-get install -f -y
+  rm google-chrome-stable_current_amd64.deb
 fi
 
 if ! which chromedriver; then
-  curl -O "http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip"
+  curl -O "http://chromedriver.storage.googleapis.com/2.15/chromedriver_linux64.zip"
   unzip chromedriver_linux64.zip
   rm chromedriver_linux64.zip
   sudo mv chromedriver /usr/local/bin;
