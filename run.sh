@@ -41,10 +41,12 @@ do
   if [ $PASSFAIL == "fail" ]; then
     mv $TARGET_DIR/E2E_OUTFILE "$TARGET_DIR/E2E_ERROR_$(date)" || true
     mv $TARGET_DIR/uncaught-exception.png "$TARGET_DIR/uncaught-exception-$(date).png" || true
-    TOKEN=$(curl -s "http://metadata/computeMetadata/v1/instance/service-accounts/default/token?alt=text" \
+    if [ $(tail -n 3 ../$TARGET_DIR.log |grep fail |wc -l) = 3 ]; then
+      TOKEN=$(curl -s "http://metadata/computeMetadata/v1/instance/service-accounts/default/token?alt=text" \
       -H "Metadata-Flavor: Google" |grep access_token |awk '{print $2}')
-    curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
-    "http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$TARGET_DIR"
+      curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
+      "http://logger-dot-rvaserver2.appspot.com/queue?task=submit&logger_version=1&token=scenario-runner&environment=prod&severity=alert&error_message=e2e-scenario-failed&error_details=$TARGET_DIR"
+    fi
   else
     rm $TARGET_DIR/E2E_OUTFILE
   fi
