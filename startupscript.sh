@@ -56,4 +56,6 @@ gcloud components update --quiet
 
 cd /home/scenario-runner
 git clone https://github.com/Rise-Vision/scenario-runner.git config
+chown -R scenario-runner:scenario-runner config
+
 crontab -u scenario-runner config/cronfile
