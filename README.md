@@ -7,7 +7,7 @@ This repository contains configuration scripts and data to run e2e tests from a 
 A [Google Compute Engine](https://cloud.google.com/compute/) instance is assumed.  If the VM is hosted on another platform there will be differences in the way environment variables and startup scripts are handled.
 
 ### Target Repository Requirements
-Target repositories are configured in an instance environment variable named E2E_TARGETS.  The variable should contain target repository URLs separated by a space character. The URLs will be used in a `git clone` (eg: git@github.com:Rise-Vision/scenario-runner.git)
+Target repositories are configured in an instance environment variable named E2E_TARGETS.  The variable should contain target repository URLs separated by a space character. The URLs will be used in a `git clone` (eg: https://github.com/Rise-Vision/storage-client.git).  It is important to configure the **https** url scheme rather than **git** and the repository must be public or the runner won't be able to clone it.
 
 Target repositories should contain their e2e tests and the tests should be executed with `npm run e2e`.  If any tests fail, a non-zero exit status should be returned from the npm command.
 

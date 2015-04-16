@@ -13,7 +13,7 @@ read -a targets <<< $(echo $E2E_TARGETS)
 
 for targetUrl in "${targets[@]}"
 do
-  TARGET_DIR=$(echo $targetUrl|awk 'BEGIN { FS = "/" } ; { print $2 }' | awk 'BEGIN { FS = "." } ; { print $1}')
+  TARGET_DIR=$(echo $targetUrl|awk 'BEGIN { FS = "/" } ; { print $5 }' | awk 'BEGIN { FS = "." } ; { print $1}')
   if [ ! -d "$TARGET_DIR" ]; then
     git clone $targetUrl;
   fi
