@@ -41,7 +41,7 @@ do
   if [ $PASSFAIL == "--FAIL--" ]; then
     mv $TARGET_DIR/E2E_OUTFILE "$TARGET_DIR/E2E_ERROR_$(date)" || true
     mv $TARGET_DIR/uncaught-exception.png "$TARGET_DIR/uncaught-exception-$(date).png" || true
-    if [ $(tail -n 3 ../$TARGET_DIR.log |grep FAIL |wc -l) = 3 ]; then
+    if [ $(tail -n 3 $TARGET_DIR.log |grep FAIL |wc -l) = 3 ]; then
       TOKEN=$(curl -s "http://metadata/computeMetadata/v1/instance/service-accounts/default/token?alt=text" \
       -H "Metadata-Flavor: Google" |grep access_token |awk '{print $2}')
       curl -X POST -H "Content-Length: 0" -H "Authorization: Bearer $TOKEN" \
