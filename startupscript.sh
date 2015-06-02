@@ -9,6 +9,10 @@ if [ ! -f /swapfile ]; then
   sudo swapon -a
 fi
 
+if ! sudo which tmpreaper; then
+  sudo apt-get -y install tmpreaper
+fi
+
 if ! which git; then
   sudo apt-get -y install git-core
   git config --global user.name "jenkins"
