@@ -9,6 +9,8 @@ while read key; do
   export $key=$(curl "http://metadata/computeMetadata/v1/instance/attributes/$key" -H "Metadata-Flavor: Google")
 done < metadata_keys
 
+export E2E_TARGETS=$(echo $E2E_TARGETS |sed 's/|/ /g')
+
 read -a targets <<< $(echo $E2E_TARGETS)
 
 for targetUrl in "${targets[@]}"
